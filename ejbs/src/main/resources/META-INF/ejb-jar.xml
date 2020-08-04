@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd"
+         version="3.0">
+    <enterprise-beans>
+        <session>
+            <ejb-name>ThreadBean</ejb-name>
+            <ejb-class>com.gent00.ThreadBean</ejb-class>
+<!--            <resource-ref>-->
+<!--                <res-ref-name>threading/mtf</res-ref-name>-->
+<!--                <mapped-name>java:jboss/ee/concurrency/factory/default</mapped-name>-->
+<!--            </resource-ref>-->
+        </session>
+        <session>
+            <ejb-name>HashOperation</ejb-name>
+            <ejb-class>com.gent00.HashOperation</ejb-class>
+        </session>
+    </enterprise-beans>
+</ejb-jar>
