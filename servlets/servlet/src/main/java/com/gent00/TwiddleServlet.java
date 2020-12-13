@@ -20,18 +20,14 @@ public class TwiddleServlet extends HttpServlet {
         try {
             String threads_str = req.getParameter("threads");
             String hashs_str = req.getParameter("hashes");
-            String useEJB_str = req.getParameter("useEJB");
             int threads = 1, hashes = 1000;
-            boolean useEJB = false;
-            if (threads_str != null & hashs_str != null & useEJB_str != null
-                    && !threads_str.isEmpty() && !hashs_str.isEmpty() & !useEJB_str.isEmpty()) {
+            if (threads_str != null && hashs_str != null && !threads_str.isEmpty() && !hashs_str.isEmpty() ) {
                 threads = Integer.parseInt(threads_str);
                 hashes = Integer.parseInt(hashs_str);
-                useEJB = Boolean.parseBoolean(useEJB_str);
             }
 
             long totalDuration = System.currentTimeMillis();
-            resp.getOutputStream().println(threadBean.spinThreads(threads, hashes, useEJB));
+            resp.getOutputStream().println(threadBean.spinThreads(threads, hashes));
             resp.getOutputStream().println("\n\nTotal Duration to call: " + (System.currentTimeMillis() - totalDuration));
         } catch (ExecutionException e) {
             e.printStackTrace();

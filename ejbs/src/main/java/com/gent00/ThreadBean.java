@@ -6,8 +6,10 @@ import javax.ejb.Stateless;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.concurrent.ManagedScheduledExecutorService;
 import javax.enterprise.concurrent.ManagedThreadFactory;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -17,18 +19,14 @@ import java.util.concurrent.TimeUnit;
 public class ThreadBean {
 
 
-    //    @Resource(name = "threading/mtf")
-    private ManagedThreadFactory threadFactory;
-
-//    @Resource(lookup = "java:jboss/ee/concurrency/executor/default")
-
-
-    private ManagedExecutorService managedExecutorService;
-
     //    @Resource(lookup = "java:jboss/ee/concurrency/scheduler/default")
     @Resource
-    private ManagedScheduledExecutorService managedScheduledExecutorService;
+    public ManagedScheduledExecutorService managedScheduledExecutorService;
 
+    //    @Resource(lookup = "java:jboss/ee/concurrency/executor/default")
+    //    @Resource(name = "threading/mtf")
+    private ManagedThreadFactory threadFactory;
+    private ManagedExecutorService managedExecutorService;
     @EJB
     private HashOperation hashOperation;
 
@@ -41,20 +39,18 @@ public class ThreadBean {
     public void showManagedExecutorService() {
     }
 
-    public String spinThreads(final int threads, final int hashsPerThread, boolean useEJB) throws ExecutionException, InterruptedException {
+    public String spinThreads(final int threads, final int hashsPerThread) throws ExecutionException, InterruptedException {
         System.out.println(threadFactory);
 
-        final class HashCallable implements Callable<Long> {
+        final class HashCallable implements Callable<Long[]> {
+            HashOperation hashOperation;
             private ManagedThreadFactory mtf;
-            private boolean useEJB = false;
+            private long executeStart = -1, executeEnd = -1, ejbWait = -1;
 
-            public HashCallable(ManagedThreadFactory threadFactory, HashOperation hashOperation, boolean useEJB) {
+            public HashCallable(ManagedThreadFactory threadFactory, HashOperation hashOperation) {
                 this.mtf = threadFactory;
                 this.hashOperation = hashOperation;
-                this.useEJB = useEJB;
-                if (!useEJB) {
-                    this.hashUtil = new HashUtil();
-                }
+
 
             }
 
@@ -62,78 +58,54 @@ public class ThreadBean {
                 return executeStart;
             }
 
-            private long executeStart = -1;
-
-            HashOperation hashOperation;
-            HashUtil hashUtil;
-
             @Override
-            public Long call() throws Exception {
+            public Long[] call() throws Exception {
                 boolean isStartSet = false;
                 System.out.println("Running Task " + this.toString() + " at " + System.currentTimeMillis() + " with " + hashOperation);
-
-
+                executeStart = System.currentTimeMillis();
                 try {
-                    for (int x = 0; x < hashsPerThread; x++) {
-                        if (useEJB) {
-                            hashOperation.generateHash("HelloWorld");
-                            if (!isStartSet) {
-                                executeStart = System.currentTimeMillis();
-                                isStartSet=true;
-                            }
-                        } else {
-                            hashUtil.generateHash("HelloWorld");
-                            if (!isStartSet) {
-                                executeStart = System.currentTimeMillis();
-                                isStartSet=true;
-                            }
-                        }
-                    }
+                    long ejbStart = System.currentTimeMillis();
+                    hashOperation.generateHash("HelloWorld", hashsPerThread);
+                    long ejbFinish = System.currentTimeMillis();
+                    ejbWait = ejbFinish - ejbStart;
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return executeStart;
+                return new Long[]{executeStart, System.currentTimeMillis(), ejbWait};//Start, End , Time to obtain EJB and generate Hash
             }
         }
 
-        Map<HashCallable, Long[]> thread2Schedule = new HashMap<>();
-        List<Future<Long>> futures = new ArrayList<>();
+        Map<Future<Long[]>, Long> futuresToScheduleTime = new HashMap<>();
+        List<Future<Long[]>> futures = new ArrayList<>();
 
         for (int x = 0; x < threads; x++) {
-            HashCallable htr = new HashCallable(threadFactory, hashOperation, useEJB);
+            HashCallable hashCallable = new HashCallable(threadFactory, hashOperation);
             long scheduleTime = System.currentTimeMillis();
-            futures.add(managedScheduledExecutorService.schedule(htr, 0, TimeUnit.SECONDS));
-            thread2Schedule.put(htr, new Long[]{scheduleTime, 0L});
-            System.out.println("Scheduled Task " + htr.toString() + " at " + scheduleTime);
+            Future<Long[]> future = managedScheduledExecutorService.schedule(hashCallable, 0, TimeUnit.SECONDS);
+            futures.add(future);
+            futuresToScheduleTime.put(future, scheduleTime);
+            System.out.println("Scheduled Task " + hashCallable.toString() + " at " + scheduleTime);
         }
 
-        System.out.println("Waiting for threads to finish hashing");
+        System.out.println("Waiting for threads to finish hashing.");
         for (Future future : futures) {
             future.get();
         }
-
-        for (HashCallable htr : thread2Schedule.keySet()) {
-            long execute = htr.getExecuteStart();
-            Long[] times = thread2Schedule.get(htr);
-            times[1] = execute;
-            thread2Schedule.put(htr, times);
-        }
+        System.out.println("Threads have completed.");
 
 
         StringBuilder builder = new StringBuilder();
-        for (HashCallable key : thread2Schedule.keySet()) {
-            long alpha = thread2Schedule.get(key)[0];
-            long omega = thread2Schedule.get(key)[1];
-            builder.append(key + " -> " + Arrays.toString(thread2Schedule.get(key)) + "-> " + (omega - alpha) + "\n");
+        for (Future<Long[]> future : futuresToScheduleTime.keySet()) {
+            long executeStart = future.get()[0];
+            long executeFinish = future.get()[1];
+            long ejbWait = future.get()[2];
+            long scheduleTime = futuresToScheduleTime.get(future);
+
+            builder.append("Future ").append(future.hashCode()).append("> ").append(executeStart).append(" -> ")
+                    .append(executeFinish).append("; ").append("ejbWait+Compute=").append(ejbWait).append(", scheduleDelayToExecute=").append(executeStart - scheduleTime).append("\n\n");
         }
 
-        long totalDelayInMs = 0;
-        for (HashCallable key : thread2Schedule.keySet()) {
-            long alpha = thread2Schedule.get(key)[0];
-            long omega = thread2Schedule.get(key)[1];
-            totalDelayInMs += omega - alpha;
-        }
-        builder.append("\n\nTotal Skew -> " + totalDelayInMs);
         return builder.toString();
     }
 }
