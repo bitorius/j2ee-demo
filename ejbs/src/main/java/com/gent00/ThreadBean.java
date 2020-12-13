@@ -40,7 +40,7 @@ public class ThreadBean {
     }
 
     public String spinThreads(final int threads, final int hashsPerThread) throws ExecutionException, InterruptedException {
-        System.out.println(threadFactory);
+        System.out.println("Thread Factory is " + threadFactory);
 
         final class HashCallable implements Callable<Long[]> {
             HashOperation hashOperation;
