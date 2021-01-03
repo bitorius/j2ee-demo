@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
-
+//http://localhost:8080/servlet/Twiddle?threads=512&hashes=1000000&useEJB=true
 @RunWith(Arquillian.class)
 public class TwiddleServletTest {
     @Deployment
