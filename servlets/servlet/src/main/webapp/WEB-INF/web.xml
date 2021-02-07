@@ -10,10 +10,31 @@
         <servlet-class>com.gent00.TwiddleServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>TwiddleJMS</servlet-name>
+        <servlet-class>com.gent00.TwiddleJMSServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>PrometheusMetrics</servlet-name>
+        <servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>Twiddle</servlet-name>
         <url-pattern>/Twiddle/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TwiddleJMS</servlet-name>
+        <url-pattern>/TwiddleJMS/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PrometheusMetrics</servlet-name>
+        <url-pattern>/Metrics/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

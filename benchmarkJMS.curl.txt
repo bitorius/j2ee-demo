@@ -1,0 +1,6 @@
+url=http://172.16.11.77:7001/servlet/TwiddleJMS?action=send&messageText=helloworld&messageCount=10000&commitSize=1
+url=http://172.16.11.77:7001/servlet/TwiddleJMS?action=recv&messageCount=10000&commitSize=1
+url=http://172.16.11.77:7001/servlet/TwiddleJMS?action=send&messageText=helloworld&messageCount=10000&commitSize=1
+url=http://172.16.11.77:7001/servlet/TwiddleJMS?action=recv&messageCount=10000&commitSize=1
+url=http://172.16.11.77:7001/servlet/TwiddleJMS?action=send&messageText=helloworld&messageCount=10000&commitSize=1
+url=http://172.16.11.77:7001/servlet/TwiddleJMS?action=recv&messageCount=10000&commitSize=1

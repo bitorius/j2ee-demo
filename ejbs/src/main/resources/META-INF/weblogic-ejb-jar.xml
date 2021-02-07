@@ -9,4 +9,13 @@
             </pool>
         </stateless-session-descriptor>
     </weblogic-enterprise-bean>
+
+    <managed-scheduled-executor-service>
+        <name>concurrent/CustomMSES</name>
+        <dispatch-policy>qrs</dispatch-policy>
+        <max-concurrent-long-running-requests>1</max-concurrent-long-running-requests>
+        <long-running-priority>1</long-running-priority>
+    </managed-scheduled-executor-service>
+
+
 </weblogic-ejb-jar>
