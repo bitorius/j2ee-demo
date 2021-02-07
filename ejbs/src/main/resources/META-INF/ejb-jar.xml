@@ -18,10 +18,10 @@
         <session>
             <ejb-name>JMSOperation</ejb-name>
             <ejb-class>com.gent00.JMSOperation</ejb-class>
-<!--            <resource-env-ref>-->
-<!--                <resource-env-ref-name>concurrent/CustomMSES</resource-env-ref-name>&lt;!&ndash;Component specific&ndash;&gt;-->
-<!--                <resource-env-ref-type>javax.enterprise.concurrent.ManagedScheduledExecutorService</resource-env-ref-type>&lt;!&ndash;Weblogic Domain Specific&ndash;&gt;-->
-<!--            </resource-env-ref>-->
+            <resource-env-ref>
+                <resource-env-ref-name>concurrent/CustomMSES</resource-env-ref-name><!--Component specific-->
+                <resource-env-ref-type>javax.enterprise.concurrent.ManagedScheduledExecutorService</resource-env-ref-type><!--Weblogic Domain Specific-->
+            </resource-env-ref>
         </session>
 
 
