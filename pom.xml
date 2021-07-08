@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gent00</groupId>
-    <artifactId>ee_thread_info</artifactId>
+    <artifactId>j2ee-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>ee_thread_info</name>
+    <name>j2ee-demo</name>
 
     <modules>
         <module>projects</module>
@@ -59,8 +59,6 @@
                 <type>pom</type>
             </dependency>
         </dependencies>
-
-
     </dependencyManagement>
 
     <build>

@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class JMSOperation {
 
-    @Resource(lookup = "java:comp/env/concurrent/CustomMSES")
-//    @Resource(mappedName = "msesglobal")
+//    @Resource(lookup = "java:comp/env/concurrent/CustomMSES")
+    @Resource(mappedName = "mses")
     public ManagedScheduledExecutorService managedScheduledExecutorService;
 
 

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
+               xmlns="http://java.sun.com/xml/ns/javaee"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3-2_0.xsd
+                     http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd"
+               version="3.1"
+               impl-version="2.0">
+    <enterprise-beans>
+
+        <session>
+            <ejb-name>JMSOperation</ejb-name>
+            <!-- This resource-ref has no corresponding res-type specified
+            neither in ejb-jar.xml nor in the bean as a @Resource (see EJBTHREE-1823
+            for the details) -->
+            <resource-ref>
+                <res-ref-name>jms/queue</res-ref-name>
+                <jndi-name>java:/jms/queue/q1</jndi-name>
+            </resource-ref>
+
+            <resource-ref>
+                <res-ref-name>jms/qcf</res-ref-name>
+                <jndi-name>java:/ConnectionFactory</jndi-name>
+            </resource-ref>
+
+            <resource-ref>
+                <res-ref-name>mses</res-ref-name>
+                <jndi-name>java:jboss/ee/concurrency/scheduler/default</jndi-name>
+            </resource-ref>
+
+
+        </session>
+
+
+
+    </enterprise-beans>
+</jboss:ejb-jar>

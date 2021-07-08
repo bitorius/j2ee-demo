@@ -11,23 +11,23 @@ import org.junit.runner.RunWith;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 //http://localhost:8080/servlet/Twiddle?threads=512&hashes=1000000&useEJB=true
-@RunWith(Arquillian.class)
-public class TwiddleServletTest {
-    @Deployment
-    public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class).addClass(ThreadBean.class).addPackage("com.gent00")
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-    }
-
-    @Inject
-    ThreadBean threadBean;
-
-    @Test
-    public void echo() throws Exception {
-        Assert.assertNotNull(threadBean);
-        System.out.println("Starting threads");
-        threadBean.spinThreads(256, 10000);
-        System.out.println("Ending threads");
-
-    }
-}
+//@RunWith(Arquillian.class)
+//public class TwiddleServletTest {
+//    @Deployment
+//    public static JavaArchive createDeployment() {
+//        return ShrinkWrap.create(JavaArchive.class).addClass(ThreadBean.class).addPackage("com.gent00")
+//                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+//    }
+//
+//    @Inject
+//    ThreadBean threadBean;
+//
+//    @Test
+//    public void echo() throws Exception {
+//        Assert.assertNotNull(threadBean);
+//        System.out.println("Starting threads");
+//        threadBean.spinThreads(256, 10000);
+//        System.out.println("Ending threads");
+//
+//    }
+//}
