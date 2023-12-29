@@ -15,6 +15,29 @@
         <servlet-class>com.gent00.TwiddleJMSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>TwiddleEEThread</servlet-name>
+        <servlet-class>com.gent00.TwiddleEEThread</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogonServlet</servlet-name>
+        <servlet-class>com.gent00.login.LogonServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogoffServlet</servlet-name>
+        <servlet-class>com.gent00.login.LogoffServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>IncrementSessionValServlet</servlet-name>
+        <servlet-class>com.gent00.login.IncrementSessionValServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
     <servlet>
 
@@ -42,4 +65,39 @@
         <url-pattern>/Metrics/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>LogonServlet</servlet-name>
+        <url-pattern>/Logon/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>IncrementSessionValServlet</servlet-name>
+        <url-pattern>/Inc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LogoffServlet</servlet-name>
+        <url-pattern>/Logoff/*</url-pattern>
+    </servlet-mapping>
+
+
+
+    <filter>
+        <filter-name>CookieFilter</filter-name> <!-- mandatory -->
+        <filter-class>com.gent00.CookieMDBFilter</filter-class> <!-- mandatory -->
+    </filter>
+    <filter-mapping>
+        <filter-name>CookieFilter</filter-name> <!-- mandatory -->
+        <url-pattern>/*</url-pattern> <!-- either url-pattern or servlet-name is mandatory -->
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+
+    <listener>
+        <listener-class>com.gent00.HTTPSessionAttributeListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.gent00.HTTPSessionListener</listener-class>
+    </listener>
 </web-app>

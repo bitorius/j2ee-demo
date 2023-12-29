@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hz-deployment
+  labels:
+    app: hz
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hz
+  template:
+    metadata:
+      labels:
+        app: hz
+    spec:
+      containers:
+        - name: hz-container
+          image: hazelcast/hazelcast:latest
+          ports:
+            - containerPort: 7501

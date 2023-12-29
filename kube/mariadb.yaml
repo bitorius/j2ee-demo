@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mdb-deployment
+  labels:
+    app: mdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mdb
+  template:
+    metadata:
+      labels:
+        app: mdb
+    spec:
+      containers:
+        - name: mdb-container
+          image: mariadb:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MARIADB_ALLOW_EMPTY_ROOT_PASSWORD
+              value: "0"
+            - name: MARIADB_ROOT_PASSWORD
+              value: secret
+#create database sessions;
+#create or replace table data(id varchar(512), k varchar(512), v longblob, ts timestamp default current_timestamp);
+#CREATE UNIQUE INDEX sessionid ON data(id,k);
+#### JBOSS Enablement
+#jboss-cli.sh -c
+#module add --name=com.mariadb --resources=/Users/avinash/.m2//repository/org/mariadb/jdbc/mariadb-java-client/2.7.2/mariadb-java-client-2.7.2.jar --dependencies=javax.api,javax.transaction.api
+#/subsystem=datasources/jdbc-driver=mariadb:add(driver-name=mariadb,driver-module-name=com.mariadb)
+#data-source add --jndi-name=java:/MariadbDS --name=MariaDBPool --connection-url=jdbc:mariadb://172.16.11.251:3306/sessions --driver-name=mariadb --user-name=root --password=secret
+#/subsystem=datasources/data-source=MariaDBPool:test-connection-in-pool

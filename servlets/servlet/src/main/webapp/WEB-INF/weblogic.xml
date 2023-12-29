@@ -1,3 +1,9 @@
 <weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app">
     <wl-dispatch-policy>ExampleWM</wl-dispatch-policy><!--This applies to entire module, not specific to Servlet-->
+    <session-descriptor>
+        <persistent-store-type>jdbc</persistent-store-type>
+        <persistent-store-pool>lolDS</persistent-store-pool>
+        <cookie-secure>true</cookie-secure>
+        <!--        <sharing-enabled>true</sharing-enabled>-->
+    </session-descriptor>
 </weblogic-web-app>
